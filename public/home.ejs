@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCampus Home</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    .main{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dark-theme{
+        background-color: rgb(14, 19, 31);
+    }
+
+    .dashBoard{
+        height: 96vh;
+        width: 20em;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: azure;
+        position: relative;
+        z-index: 1;
+        margin-top: 1em;
+        margin-left: 1em;
+        border-radius: 1em;
+    }
+
+    .analytics{
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 74em;
+    }
+    
+    .navigator{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .searchOne{
+        column-gap: 10em;
+    }
+
+    .D-search{
+        text-align: center;
+        width: 15em;
+        height: 3em;
+        border-radius: 3em;
+    }
+
+    .btn{
+        width: 7em;
+        height: 3em;
+        border-radius: 3em;
+        border: none;
+        background-color: blueviolet;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .DBcontent{
+        height: 3em;
+        width: 18.5em;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 1em;
+        border-radius: 1em;
+        margin-top: 1em;
+        background-color: rgba(102, 107, 121, 0.156);
+        color: white;
+        column-gap: 2em;
+    }
+
+    .DBcontent :hover{
+        background-color: rgba(102, 107, 121, 0.356);
+        transform: translate(50%, 50%) opacity(1) scale(1.1) turn(.5turn);
+    }
+
+    .container-main{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        column-gap: 1em;
+    }
+</style>
+<body>
+    <div class="main dark-theme" id="dark" style="height: 100vh;width: 100vw;">
+        <div class="dashBoard" id="DB">
+            <div class="DBcontent" onclick="showDB()" id="Dash">
+                <svg fill="blue" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.5 489.5" xml:space="preserve" stroke="1001100" height="20" width="20"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M449.9,21.25H39.5C17.7,21.25,0,38.95,0,60.75v277.3c0,21.8,17.7,39.5,39.5,39.5h161v44.2h-31.4c-5.2,0-9.5,4.3-9.5,9.5 v27.5c0,5.2,4.3,9.5,9.5,9.5h151.3c5.2,0,9.5-4.3,9.5-9.5v-27.5c0-5.2-4.3-9.5-9.5-9.5H289v-44.1h161c21.8,0,39.5-17.7,39.5-39.5 V60.75C489.4,38.95,471.7,21.25,449.9,21.25z M435.5,323.35H53.9V75.15h381.7v248.2H435.5z"></path> <path d="M268.4,109.55h-47.3v180.1h47.3V109.55z M233.7,122.25H249l-15.3,15.3V122.25z M255.7,276.95h-15.4l15.4-15.4V276.95z M255.7,244.85l-22,22v-15.6l22-22V244.85z M255.7,212.55l-22,22v-15.6l22-22V212.55z M255.7,180.25l-22,22v-15.6l22-22V180.25z M255.7,147.85l-22,22v-15.6l22-22V147.85z"></path> <rect x="287.7" y="192.75" width="47.3" height="96.9"></rect> <path d="M201.7,153.45h-47.3v136.1h47.3V153.45z M189,276.95h-22v-110.8h22V276.95z"></path> </g> </g> </g>
+                </svg>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="DBcontent"></div>
+            <div class="DBcontent"></div>
+            <div class="DBcontent"></div>
+        </div>
+        <div class="analytics" id="Gross">
+            <div class="nav" id="navBar">
+                <%- include("./partials/nav") %>
+            </div>
+            <div class="container-main" id="container-main">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

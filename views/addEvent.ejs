@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Event</title>
+    <style>
+        .container-main {
+            max-width: 600px;
+            margin: auto;
+            padding: 2em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background: linear-gradient(to right, #f8f9fa, #ececec); /* Background gradient */
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label, input, select, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;  
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, #ffffff, #e0e0e0); /* Inner gradient */
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #4CAF50; /* Green border on focus */
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.8), inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        button {
+            width: auto;
+            padding: 10px;
+            margin-top: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"] {
+            background-color: #4CAF50; /* Green */
+            display: block;
+            margin: 1em auto; /* Center the button */
+            width: 50%; /* Adjust the width as needed */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        button.done-button {
+            background-color: #f44336; /* Red */
+            margin-top: 0;
+            display: block;
+            margin: 1em auto; /* Center the button */
+            width: 50%; /* Adjust the width as needed */
+        }
+
+        button.done-button:hover {
+            background-color: #da190b; /* Darker red */
+        }
+    </style>
+</head>
+<body>
+    <div class="container-main">
+        <h1>Add New Event</h1>
+        <form action="/api/Event_data" method="POST">
+            <label for="eventName">Event Name</label>
+            <input type="text" name="eventName" id="eventName" required>
+
+            <label for="eventStartTime">Event Start Time</label>
+            <input type="time" name="eventStartTime" id="eventStartTime" required>
+
+            <label for="eventEndTime">Event End Time</label>
+            <input type="time" name="eventEndTime" id="eventEndTime" required>
+
+            <label for="bellDate">Event Date</label>
+
+            <input type="date" name="bellDate" id="bellDate" required>
+
+            <button type="submit">Add Bell</button>
+        </form>
+        <button type="button" class="done-button" onclick="redirectToSmartBells()">Done</button>
+    </div>
+
+    <script>
+        let count = 0;
+        function redirectToSmartBells() {
+            count++;
+            if (document.referrer && count === 1) {
+                window.location.href = document.referrer;
+                count = 0;
+            } else {
+                count++;
+                window.history.back();
+                count = 0;  
+            }
+        }
+    </script>
+</body>
+</html>

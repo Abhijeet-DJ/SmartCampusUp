@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- <link rel="stylesheet" href="Home.css" type="text/css"> -->
+</head>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #0481e0 50%, #FFFFFF 50%);
+        color: #fff;
+    }
+
+    #sidebar {
+        width: 15%;
+        height: fit-content;
+        background-color: #ffffff;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        color: #000;
+        align-items: center;
+        justify-content: flex-start;
+        border: .01em solid #000;
+        padding-top: 1em;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        border-radius: 1em;
+        margin: 1em;
+    }
+
+    #main {
+        margin-left: 15%;
+        padding: 20px;
+    }
+
+    #top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #widgets {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+    }
+
+    .widget {
+        background-color: #fff;
+        color: #000;
+        width: 23%;
+        height: 100px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #chart,
+    #scheduled-bells,
+    #promo {
+        background-color: #fff;
+        color: #000;
+        border-radius: 10px;
+        margin: 20px 0;
+        padding: 20px;
+    }
+
+    #chart {
+        height: 20em;
+        width: 40em;
+        border: 0.01em solid #000;
+        margin-right: 5px;
+    }
+
+    .imgRan {
+        display: inline;
+        position: absolute;
+        left: 68%;
+        top: 40%;
+        border: 0.01em solid #000;
+        border-radius: 0.85em;
+        margin: 0;
+        padding: 0;
+    }
+
+    #scheduled-bells table {
+        width: 100%;
+        margin-top: 0;
+        border-collapse: collapse;
+    }
+
+    #scheduled-bells th,
+    #scheduled-bells td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #promo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #promo button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .dash-items {
+        width: 99%;
+        height: 3em;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* border: 0.01em solid #000; */
+        border-radius: 2em;
+        cursor: pointer;
+        background-color: #ffffff;
+    }
+
+    .btn-DB {
+        border: none;
+        border-radius: .5em;
+        height: 3em;
+        width: 10em;
+    }
+
+    #scheduled-bells {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 1em;
+
+        >#save-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 1em;
+            border-radius: 1em;
+            cursor: pointer;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+    }
+
+    #prevData {
+        position: relative;
+        left: 0em;
+        top: 0em;
+        width: 40em;
+    }
+
+    /* Media query for screens from 300px and up */
+    @media (min-width: 300px) {
+        body {
+            font-size: 1em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        #sidebar {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: center;
+            align-content: flex-start;
+            width: 50%;
+            height: auto;
+            position: sticky;
+            top: 0px;
+            margin: 0;
+            padding: 1em;
+            column-gap: 1em;
+        }
+
+        #main {
+            margin-left: 0;
+            padding: 1em;
+        }
+
+        #top-bar {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #widgets {
+            flex-direction: column;
+        }
+
+        .widget {
+            width: 100%;
+            margin-bottom: 1em;
+            /* display: none; */
+        }
+
+        .dash-items {
+            width: auto;
+            height: auto;
+            /* margin: 1em; */
+        }
+    }
+
+    /* Media query for screens from 600px and up */
+    @media (min-width: 600px) {
+        body {
+            font-size: 1em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        #sidebar {
+            width: 25%;
+            height: 93vh;
+            position: fixed;
+            margin: 1em;
+            padding-top: 2em;
+        }
+
+        #main {
+            margin-left: 25%;
+            padding: .5em;
+        }
+
+        #top-bar {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        #widgets {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .widget {
+            width: 23%;
+            margin-bottom: 0;
+        }
+
+        .dash-items {
+            width: 100%;
+            margin: 0;
+        }
+    }
+
+    /* Media query for screens from 900px and up */
+    @media (min-width: 900px) {
+        body {
+            font-size: 1em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        #sidebar {
+            width: 15%;
+        }
+
+        #main {
+            margin-left: 18em;
+        }
+    }
+</style>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<body>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <div style="height: 93vh;width: fit-content; display: inline;">
+        <div id="sidebar">
+            <div class="dash-items">
+                <button class="btn-DB" onclick="showDB()"
+                    style="background-color: #ffffff; :hover { background-color:  #f6ebeb};display: flex; flex-direction: row; justify-content: center; align-items: center; cursor: pointer;">
+                    <svg fill="#007bff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 489.5 489.5" xml:space="preserve"
+                        stroke="1001100" height="24" width="24"
+                        style=":hover{fill-opacity: .99; background-blend-mode:soft-light;}">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <g>
+                                    <path
+                                        d="M449.9,21.25H39.5C17.7,21.25,0,38.95,0,60.75v277.3c0,21.8,17.7,39.5,39.5,39.5h161v44.2h-31.4c-5.2,0-9.5,4.3-9.5,9.5 v27.5c0,5.2,4.3,9.5,9.5,9.5h151.3c5.2,0,9.5-4.3,9.5-9.5v-27.5c0-5.2-4.3-9.5-9.5-9.5H289v-44.1h161c21.8,0,39.5-17.7,39.5-39.5 V60.75C489.4,38.95,471.7,21.25,449.9,21.25z M435.5,323.35H53.9V75.15h381.7v248.2H435.5z">
+                                    </path>
+                                    <path
+                                        d="M268.4,109.55h-47.3v180.1h47.3V109.55z M233.7,122.25H249l-15.3,15.3V122.25z M255.7,276.95h-15.4l15.4-15.4V276.95z M255.7,244.85l-22,22v-15.6l22-22V244.85z M255.7,212.55l-22,22v-15.6l22-22V212.55z M255.7,180.25l-22,22v-15.6l22-22V180.25z M255.7,147.85l-22,22v-15.6l22-22V147.85z">
+                                    </path>
+                                    <rect x="287.7" y="192.75" width="47.3" height="96.9" fill="grey"></rect>
+                                    <path d="M201.7,153.45h-47.3v136.1h47.3V153.45z M189,276.95h-22v-110.8h22V276.95z">
+                                    </path>
+                                </g>
+                            </g>
+                        </g>
+                    </svg> <span
+                        style="text-align: left; margin: 1em; height: auto; width: auto; background-color: #ffffff; border-radius: .5em;">
+                        Dashboard </button></span>
+            </div>
+
+            <div class="dash-items">
+                <button class="btn-DB" onclick="showAtten()"
+                    style="background-color: #ffffff; :hover { background-color:  #f5efefdc};display: flex; flex-direction: row; justify-content: center; align-items: center; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="yellow" height="1.5em"
+                        width="1.5em">
+                        <path
+                            d="M109.5 244l134.6-134.6-44.1-44.1-61.7 61.7a7.9 7.9 0 0 1 -11.2 0l-11.2-11.2c-3.1-3.1-3.1-8.1 0-11.2l61.7-61.7-33.6-33.7C131.5-3.1 111.4-3.1 99 9.3L9.3 99c-12.4 12.4-12.4 32.5 0 44.9l100.2 100.2zm388.5-116.8c18.8-18.8 18.8-49.2 0-67.9l-45.3-45.3c-18.8-18.8-49.2-18.8-68 0l-46 46 113.2 113.2 46-46zM316.1 82.7l-297 297L.3 487.1c-2.5 14.5 10.1 27.1 24.6 24.6l107.5-18.8L429.3 195.9 316.1 82.7zm186.6 285.4l-33.6-33.6-61.7 61.7c-3.1 3.1-8.1 3.1-11.2 0l-11.2-11.2c-3.1-3.1-3.1-8.1 0-11.2l61.7-61.7-44.1-44.1L267.9 402.5l100.2 100.2c12.4 12.4 32.5 12.4 44.9 0l89.7-89.7c12.4-12.4 12.4-32.5 0-44.9z" />
+                    </svg> <span
+                        style="text-align:left; margin: 1em; height: auto; width: auto; background-color: #ffffff; border-radius: .5em;">
+                        Attendance </span></button>
+            </div>
+
+            <div class="dash-items">
+                <button class="btn-DB" onclick="showBells()"
+                    style="background-color: #ffffff; :hover { background-color:  #fef7f7};display: flex; flex-direction: row; justify-content: center; align-items: center; cursor: pointer;">
+                    <svg fill="pink" height="2em" width="2em" version="1.1" id="Layer_1"
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="-30.72 -30.72 573.44 573.44" xml:space="preserve" stroke="yellow"
+                        stroke-width="0.00512">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0">
+                            <rect x="-30.72" y="-30.72" width="573.44" height="573.44" rx="286.72" fill="#ffff"
+                                strokewidth="0">
+                            </rect>
+                        </g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <g>
+                                    <path
+                                        d="M439.652,347.915v-97.48c0-85.797-59.14-158.031-138.794-178.101c3.34-6.707,5.229-14.258,5.229-22.246 C306.087,22.469,283.618,0,256,0c-27.618,0-50.087,22.469-50.087,50.087c0,7.988,1.889,15.539,5.229,22.246 c-79.654,20.07-138.794,92.305-138.794,178.101v97.48c-19.433,6.892-33.391,25.45-33.391,47.215 c0,27.618,22.469,50.087,50.087,50.087h85.158C181.957,483.275,215.686,512,256,512s74.042-28.725,81.799-66.783h85.158 c27.618,0,50.087-22.469,50.087-50.087C473.043,373.365,459.085,354.807,439.652,347.915z M256,33.391 c9.206,0,16.696,7.49,16.696,16.696S265.206,66.783,256,66.783c-9.206,0-16.696-7.49-16.696-16.696S246.794,33.391,256,33.391z M256,478.609c-21.766,0-40.323-14.07-47.215-33.503h94.431C296.323,464.539,277.766,478.609,256,478.609z M422.957,411.826 H89.044c-9.206,0-16.696-7.49-16.696-16.696s7.49-16.696,16.696-16.696h33.392c9.22,0,16.696-7.475,16.696-16.696 s-7.475-16.696-16.696-16.696h-16.697v-94.609c0-82.854,67.407-150.261,150.261-150.261s150.261,67.407,150.261,150.261v94.609 h-16.71c-9.22,0-16.696,7.475-16.696,16.696s7.475,16.696,16.696,16.696h33.406c9.206,0,16.696,7.49,16.696,16.696 S432.162,411.826,422.957,411.826z">
+                                    </path>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path
+                                        d="M256,133.565c-64.442,0-116.87,52.428-116.87,116.87c0,9.22,7.475,16.696,16.696,16.696s16.696-7.475,16.696-16.696 c0-46.03,37.448-83.478,83.478-83.478c9.22,0,16.696-7.475,16.696-16.696S265.22,133.565,256,133.565z">
+                                    </path>
+                                </g>
+                            </g>
+                        </g>
+                    </svg> <span
+                        style="text-align:left; margin: 1em; height: auto; width: auto; background-color: #ffffff; border-radius: .5em;">Smart
+                        Bells </span></button>
+            </div>
+            <div class="dash-items">
+                <button class="btn-DB" onclick="showNotification()"
+                    style="background-color: #fffcfc; :hover { background-color:  #fff8f8};display: flex; flex-direction: row; justify-content: center; align-items: center; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                        id="webnotification" viewBox="-36.49 -36.49 287.61 287.61"
+                        enable-background="new 0 0 214.6279 199.8223" xml:space="preserve" width="2.75em"
+                        height="2.75em" fill="#000000" stroke="#000000" stroke-width="2.7901627" fill="grey">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0">
+                            <rect x="-36.49" y="-36.49" width="287.61" height="287.61" rx="143.805" fill="#fff"
+                                strokewidth="0">
+                            </rect>
+                        </g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <path fill="#5CB0FF"
+                                    d="M110.4863,184h82.5234l-41.2617-75.6484L110.4863,184z M155.748,168h-8v-44h8V168z">
+                                </path>
+                                <path fill="#1C71DA"
+                                    d="M91.748,160V84h42.989c0.0146,0.7878,0.0696,1.5579,0.0696,2.3516c0,2.2109,1.7891,4,4,4s4-1.7891,4-4 c0-0.7937-0.0603-1.5632-0.0745-2.3516h25.0159h5.6484h2.3516c0-46.3164-37.6836-84-84-84h-8v0.4053 C41.1726,4.45,7.748,40.3838,7.748,84c0,46.3164,37.6836,84,84,84c2.2109,0,4-1.7891,4-4S93.959,160,91.748,160z M83.748,158.6755 c-19.9287-6.438-35.0586-36.3945-35.0586-72.324c0-0.7937,0.0549-1.5637,0.0696-2.3516h34.989V158.6755z M49.1655,76 C51.75,44.7942,65.7729,19.8376,83.748,14.0312V76H49.1655z M91.748,76V12.707c21.6829,0,39.6248,27.5808,42.5825,63.293H91.748z M167.3181,76h-24.9685c-2.3884-29.9812-14.96-54.8911-31.9993-65.6013C140.7681,18.0952,163.9641,44.0977,167.3181,76z M73.1458,10.3987C56.1064,21.1089,43.5349,46.0188,41.1465,76H16.178C19.532,44.0977,42.728,18.0952,73.1458,10.3987z M15.748,84 h25.0159c-0.0142,0.7883-0.0745,1.5579-0.0745,2.3516c0,28.5327,9.217,53.6572,23.1233,68.2603 C35.7031,143.4497,15.748,116.0374,15.748,84z">
+                                </path>
+                                <path fill="#1C71DA"
+                                    d="M203.2598,186.0859l-48-88c-1.3984-2.5703-5.625-2.5703-7.0234,0l-48,88 c-0.6758,1.2383-0.6484,2.7422,0.0703,3.957c0.7227,1.2109,2.0312,1.957,3.4414,1.957h96c1.4102,0,2.7188-0.7461,3.4414-1.957 C203.9082,188.8281,203.9355,187.3242,203.2598,186.0859z M110.4863,184l41.2617-75.6484L193.0098,184H110.4863z">
+                                </path>
+                                <rect x="147.748" y="124" fill="#FFFFFF" width="8" height="44"></rect>
+                                <rect x="147.748" y="171.3333" fill="#FFFFFF" width="8" height="4.9167"></rect>
+                            </g>
+                            <path fill="#FF5D5D"
+                                d="M172,23.8223c-1.0234,0-2.0479-0.3906-2.8281-1.1719c-1.5625-1.5615-1.5625-4.0947,0-5.6562l14.1426-14.1416 c1.5625-1.5625,4.0957-1.5625,5.6562,0c1.5625,1.5615,1.5625,4.0947,0,5.6562l-14.1426,14.1416 C174.0469,23.4316,173.0234,23.8223,172,23.8223z">
+                            </path>
+                            <path fill="#FF5D5D"
+                                d="M186.1426,23.8223c-1.0234,0-2.0469-0.3906-2.8281-1.1719L169.1719,8.5088 c-1.5625-1.5615-1.5625-4.0947,0-5.6562c1.5605-1.5625,4.0938-1.5625,5.6562,0l14.1426,14.1416 c1.5625,1.5615,1.5625,4.0947,0,5.6562C188.1904,23.4316,187.166,23.8223,186.1426,23.8223z">
+                            </path>
+                            <path fill="#00D40B"
+                                d="M14,199.8223c-7.7197,0-14-6.2803-14-14s6.2803-14,14-14s14,6.2803,14,14S21.7197,199.8223,14,199.8223z M14,179.8223c-3.3086,0-6,2.6914-6,6s2.6914,6,6,6s6-2.6914,6-6S17.3086,179.8223,14,179.8223z">
+                            </path>
+                            <path fill="#FFC504"
+                                d="M199.3145,118.4502c-1.0605,0-2.0781-0.4219-2.8281-1.1719l-11.3145-11.3145 c-0.75-0.75-1.1719-1.7676-1.1719-2.8281s0.4219-2.0781,1.1719-2.8281l11.3145-11.3135c1.5625-1.5625,4.0938-1.5625,5.6562,0 l11.3135,11.3135c1.5625,1.5615,1.5625,4.0947,0,5.6562l-11.3135,11.3145C201.3926,118.0283,200.375,118.4502,199.3145,118.4502z M193.6572,103.1357l5.6572,5.6572l5.6572-5.6572l-5.6572-5.6572L193.6572,103.1357z">
+                            </path>
+                        </g>
+                    </svg> <span
+                        style="text-align: left; margin: 1em; height: auto; width: auto; border-color: #ffffff; border-radius: .5em;">
+                        Notifications </span></button>
+            </div>
+            <div class="dash-items">
+                <button class="btn-DB" onclick="showIrrigation()"
+                    style="background-color: #ffffff; :hover { background-color:  #ffffff};display: flex; flex-direction: row; justify-content: center; align-items: center; cursor: pointer;">
+
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-29.75 -29.75 357.00 357.00"
+                        xml:space="preserve" width="3em" height="3em" fill="0adbd8" stroke="#0adbd8"
+                        stroke-width="0.002975">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)">
+                            <rect x="-29.75" y="-29.75" width="357.00" height="357.00" rx="178.5" fill="#ffffff"
+                                strokewidth="0"></rect>
+                        </g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
+                            stroke-width="0.595"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <g id="XMLID_34_">
+                                    <g>
+                                        <path style="fill:#BEBB5D;"
+                                            d="M190.92,219.581v48.92h-84.34v-48.92h16.15c5.45,0,9.88-4.43,9.88-9.89v-29.15h32.29v29.15 c0,5.46,4.42,9.89,9.88,9.89H190.92z">
+                                        </path>
+                                        <rect x="106.58" y="141.501" style="fill:#86A090;" width="84.34" height="19.27">
+                                        </rect>
+                                        <path style="fill:#1E918A;"
+                                            d="M40.43,122.021c0.51-0.06,1.01-0.11,1.5-0.15c-5.13,7.01-4.96,12.63-4.21,19.87l0.13,1.2 c0.33,3.37-0.96,4.76-1.96,5.51c-2.36,1.77-6.56,2.22-9.58,1.01c-4.81-1.92-7.16-7.4-5.24-12.21 C24.7,128.191,31.03,123.211,40.43,122.021z">
+                                        </path>
+                                        <path style="fill:#1E918A;"
+                                            d="M56.16,81.181c-5.55-0.73-9.56,0.97-14.29,3.46l-0.86,0.45c-2.04,1.06-2.97,0.49-3.42,0.22 c-1.62-0.98-2.99-3.62-2.99-5.75c0-3.45,2.81-6.26,6.26-6.26C48.66,73.301,53.35,76.971,56.16,81.181z">
+                                        </path>
+                                        <path style="fill:#1E918A;"
+                                            d="M84.57,25.461c7.26,6.53,9.75,14.2,7.62,23.43c-0.12,0.5-0.24,0.98-0.38,1.46 c-4.81-7.23-10.15-9.01-17.2-10.81l-1.17-0.3c-3.27-0.84-4.13-2.54-4.49-3.73c-0.85-2.83,0.19-6.93,2.36-9.35 c1.85-2.06,4.41-3.1,6.99-3.1C80.53,23.061,82.78,23.851,84.57,25.461z">
+                                        </path>
+                                        <path style="fill:#1E918A;"
+                                            d="M254.65,135.731c3.03,1.12,4.59,4.49,3.48,7.53c-2.5,6.78-7.13,9.82-11.7,11.04 c2.32-4.68,2.1-8.83,1.44-13.87l-0.12-0.94c-0.27-2.1,0.49-2.7,0.86-3c0.9-0.72,2.39-1.12,3.84-1.12 C253.23,135.371,253.99,135.491,254.65,135.731z">
+                                        </path>
+                                        <path style="fill:#1E918A;"
+                                            d="M244.94,77.481c1.8,2.71,2.24,6.92,0.99,9.59c-0.53,1.13-1.62,2.68-4.99,3.05l-1.2,0.12 c-7.26,0.77-12.82,1.77-18.65,8.3c-0.94-7.47,0.57-16.83,10.83-23.66c2.08-1.39,4.58-1.89,7.05-1.4 C241.43,73.971,243.55,75.401,244.94,77.481z">
+                                        </path>
+                                        <path
+                                            d="M287.37,268.501c5.46,0,9.88,4.42,9.88,9.88c0,5.46-4.42,9.89-9.88,9.89H10.14c-5.46,0-9.89-4.43-9.89-9.89 c0-5.46,4.43-9.88,9.89-9.88h76.68v-58.81c0-5.46,4.42-9.88,9.88-9.88h16.14v-19.27H96.7c-5.46,0-9.88-4.43-9.88-9.89v-39.04 c0-5.46,4.42-9.88,9.88-9.88h104.11c5.45,0,9.88,4.42,9.88,9.88v39.04c0,5.46-4.43,9.89-9.88,9.89h-16.15v19.27h16.15 c5.45,0,9.88,4.42,9.88,9.88v58.81H287.37z M190.92,268.501v-48.92h-16.14c-5.46,0-9.88-4.43-9.88-9.89v-29.15h-32.29v29.15 c0,5.46-4.43,9.89-9.88,9.89h-16.15v48.92H190.92z M190.92,160.771v-19.27h-84.34v19.27H190.92z">
+                                        </path>
+                                        <path
+                                            d="M259.42,122.741c10.2,3.75,15.44,15.1,11.69,25.29c-6.02,16.38-19.67,20.82-30.72,20.82c-4,0-7.65-0.58-10.48-1.38 c-2.44-0.7-4.31-2.68-4.86-5.17c-0.55-2.48,0.31-5.07,2.24-6.73c7.74-6.67,7.57-7.95,6.86-13.34l-0.13-0.98 c-0.81-6.34,1.31-11.87,5.96-15.58C245.16,121.551,252.97,120.371,259.42,122.741z M258.13,143.261 c1.11-3.04-0.45-6.41-3.48-7.53c-0.66-0.24-1.42-0.36-2.2-0.36c-1.45,0-2.94,0.4-3.84,1.12c-0.37,0.3-1.13,0.9-0.86,3l0.12,0.94 c0.66,5.04,0.88,9.19-1.44,13.87C251,153.081,255.63,150.041,258.13,143.261z">
+                                        </path>
+                                        <path
+                                            d="M256.45,69.811c4.51,6.76,5.32,16.05,2.01,23.12c-2.92,6.25-8.61,10.14-16.02,10.94l-1.25,0.14 c-7.15,0.75-9.56,1-16.01,13.51c-1.16,2.26-3.47,3.7-6.02,3.75c-0.04,0-0.08,0-0.13,0c-2.49,0-4.8-1.35-6.03-3.53 c-6.63-11.79-12.82-38.33,11.24-54.38c5.17-3.44,11.36-4.66,17.44-3.45C247.76,61.131,253.01,64.651,256.45,69.811z M245.93,87.071c1.25-2.67,0.81-6.88-0.99-9.59c-1.39-2.08-3.51-3.51-5.97-4c-2.47-0.49-4.97,0.01-7.05,1.4 c-10.26,6.83-11.77,16.19-10.83,23.66c5.83-6.53,11.39-7.53,18.65-8.3l1.2-0.12C244.31,89.751,245.4,88.201,245.93,87.071z">
+                                        </path>
+                                        <path
+                                            d="M246.62,219.581c5.46,0,9.88,4.42,9.88,9.88c0,5.46-4.42,9.88-9.88,9.88c-5.46,0-9.89-4.42-9.89-9.88 c0-5.46,4.42-9.88,9.88-9.88H246.62z">
+                                        </path>
+                                        <path
+                                            d="M116.16,89.111c5.46,0,9.88,4.43,9.88,9.89c0,5.45-4.42,9.88-9.88,9.88c-5.46,0-9.89-4.43-9.89-9.88 c0-5.46,4.42-9.89,9.88-9.89H116.16z">
+                                        </path>
+                                        <path
+                                            d="M93.83,15.181c21.49,19.34,11.54,44.71,3.28,55.43c-1.32,1.71-3.36,2.69-5.48,2.69c-0.37,0-0.75-0.03-1.12-0.09 c-2.51-0.42-4.6-2.17-5.42-4.58c-4.58-13.31-6.92-13.91-13.89-15.68l-1.22-0.31c-7.22-1.87-12.29-6.54-14.28-13.14 c-2.25-7.47-0.11-16.55,5.32-22.59C69.59,7.391,84.3,6.611,93.83,15.181z M92.19,48.891c2.13-9.23-0.36-16.9-7.62-23.43 c-1.79-1.61-4.04-2.4-6.27-2.4c-2.58,0-5.14,1.04-6.99,3.1c-2.17,2.42-3.21,6.52-2.36,9.35c0.36,1.19,1.22,2.89,4.49,3.73 l1.17,0.3c7.05,1.8,12.39,3.58,17.2,10.81C91.95,49.871,92.07,49.391,92.19,48.891z">
+                                        </path>
+                                        <path
+                                            d="M74.11,92.211c0.2,2.54-1.02,4.98-3.16,6.35c-1.14,0.73-2.44,1.1-3.74,1.1c-1.15,0-2.31-0.29-3.36-0.88 c-9.31-5.17-10.63-4.48-15.55-1.89l-0.91,0.47c-5.77,3-11.8,2.92-16.98-0.22c-5.77-3.5-9.65-10.57-9.65-17.58 c0-11.08,9.02-20.1,20.1-20.1C65.2,59.461,73.25,80.891,74.11,92.211z M41.87,84.641c4.73-2.49,8.74-4.19,14.29-3.46 c-2.81-4.21-7.5-7.88-15.3-7.88c-3.45,0-6.26,2.81-6.26,6.26c0,2.13,1.37,4.77,2.99,5.75c0.45,0.27,1.38,0.84,3.42-0.22 L41.87,84.641z">
+                                        </path>
+                                        <path
+                                            d="M63.83,115.201c0.48,2.5-0.45,5.06-2.42,6.67c-10.91,8.89-10.66,11.3-9.92,18.45l0.12,1.25 c0.74,7.42-1.89,13.79-7.4,17.94c-3.91,2.93-9,4.47-14.11,4.47c-3.05,0-6.11-0.55-8.93-1.67c-11.89-4.76-17.7-18.3-12.95-30.19 c10.74-26.85,37.99-26.27,50.9-22.21C61.54,110.671,63.36,112.701,63.83,115.201z M41.93,121.871c-0.49,0.04-0.99,0.09-1.5,0.15 c-9.4,1.19-15.73,6.17-19.36,15.23c-1.92,4.81,0.43,10.29,5.24,12.21c3.02,1.21,7.22,0.76,9.58-1.01c1-0.75,2.29-2.14,1.96-5.51 l-0.13-1.2C36.97,134.501,36.8,128.881,41.93,121.871z">
+                                        </path>
+                                        <path
+                                            d="M34.62,203.271c5.46,0,9.88,4.42,9.88,9.88c0,5.46-4.42,9.88-9.88,9.88s-9.89-4.42-9.89-9.88c0-5.46,4.42-9.88,9.88-9.88 H34.62z">
+                                        </path>
+                                    </g>
+                                    <g> </g>
+                                </g>
+                            </g>
+                        </g>
+                    </svg> <span
+                        style="text-align: left; margin: 1em; height: auto; width: auto; border-color: #ffffff; border-radius: .5em;">
+                        Smart Irrigation </span></button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="main">
+        <div id="top-bar">
+            <h1> Dashboard </h1>
+            <input type="text" placeholder="Type here...">
+
+            <% if (locals.user) { %>
+                <button type="button" style="background-color: rgba(14, 19, 31, 0.078); color: white;border: none;"
+                    id="signOut" onclick="SignOut()" enabled>Sign Out
+                </button>
+
+                <% } else { %>
+                    <button type="button" style="background-color: rgba(14, 19, 31, 0.078); color: white;border: none;"
+                        id="signIn" onclick="SignIn()">Sign In</button>
+                    <% } %>
+
+        </div>
+
+
+        <div id="widgets">
+            <div class="widget">Widget 1</div>
+            <div class="widget">Widget 2</div>
+            <div class="widget">Widget 3</div>
+            <div class="widget">Widget 4</div>
+        </div>
+        <div id="chart">
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        <img src="https://images.pexels.com/photos/1685413/pexels-photo-1685413.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            alt="RandomImage" height="40%" width="30%" class="imgRan">
+
+        <div id="scheduled-bells">
+            <h2>Scheduled Bells</h2>
+            <table id="Bell_TableDash">
+                <thead>
+                    <tr>
+                        <th>Bell Name</th>
+                        <th>Frequency</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Current Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div id="promo">
+            <p>Check the status of Irrigation</p>
+            <button>Manage Now</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/dist/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0"></script> -->
+
+    <script>
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Data Trends',
+                    data: [6, 5, 8, 1, 6, 5, 0],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+
+        function SignOut() {
+
+            history.pushState(null, null, "/signin");
+
+            Cookies.remove("token");
+
+            window.onpopstate = function (event) {
+                window.location.href = "/signin";
+            }
+
+            window.location.href = "/signin";
+        }
+
+        function SignIn() {
+            window.location.href = "/signin";
+        }
+
+        async function showDB() {
+            async function fetchData() {
+                try {
+                    console.log("Fetching data");
+                    const response = await fetch('/api/Bell_data');
+                    const data = await response.json();
+                    console.log("Fetched Data: ", data);
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    return null; // Return null in case of error
+                }
+            }
+
+            function displayData(data) {
+                const tableBody = document.querySelector('#Bell_TableDash tbody');
+                if (!tableBody) { console.error('Table body not found'); return; }
+                console.log(tableBody);
+                tableBody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    const bellNameCell = document.createElement('td');
+                    const bellFrequencyCell = document.createElement('td');
+                    const bellDateCell = document.createElement('td');
+                    const bellTimeCell = document.createElement('td');
+                    const bellCurrentStatusCell = document.createElement('td');
+
+
+                    bellNameCell.textContent = item.bell_Name;
+                    bellFrequencyCell.textContent = item.bell_Frequency;
+                    bellDateCell.textContent = item.bell_Date;
+                    bellTimeCell.textContent = item.bell_Time;
+                    bellCurrentStatusCell.textContent = item.bell_Status;
+
+                    row.appendChild(bellNameCell);
+                    row.appendChild(bellFrequencyCell);
+                    row.appendChild(bellDateCell);
+                    row.appendChild(bellTimeCell);
+                    row.appendChild(bellCurrentStatusCell);
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Check if data exists in local storage
+            let data = JSON.parse(localStorage.getItem('bellData'));
+
+            if (!data) {
+                // If not, fetch data from the server
+                data = await fetchData();
+
+                if (data) {
+                    // Store fetched data in local storage
+                    localStorage.setItem('bellData', JSON.stringify(data));
+                }
+            }
+
+            if (data) {
+                console.log("Display Data");
+                displayData(data);
+
+                // Delay the redirection
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1500); // Delay in milliseconds (3000ms = 3s)
+            }
+        }
+
+        // Function to retrieve and display data from local storage after page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            const storedData = localStorage.getItem('bellData');
+            if (storedData) {
+                const data = JSON.parse(storedData);
+                const tableBody = document.querySelector('#Bell_TableDash tbody');
+                if (tableBody) {
+                    tableBody.innerHTML = '';
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        const bellNameCell = document.createElement('td');
+                        const bellFrequencyCell = document.createElement('td');
+                        const bellDateCell = document.createElement('td');
+                        const bellTimeCell = document.createElement('td');
+                        const bellCurrentStatusCell = document.createElement('td');
+                        const actionsCell = document.createElement('td');
+
+                        bellNameCell.textContent = item.bell_Name;
+                        bellFrequencyCell.textContent = item.bell_Frequency;
+                        bellDateCell.textContent = item.bell_Date;
+                        bellTimeCell.textContent = item.bell_Time;
+                        bellCurrentStatusCell.textContent = item.bell_Status;
+
+                        row.appendChild(bellNameCell);
+                        row.appendChild(bellFrequencyCell);
+                        row.appendChild(bellDateCell);
+                        row.appendChild(bellTimeCell);
+                        row.appendChild(bellCurrentStatusCell);
+                        row.appendChild(actionsCell);
+                        tableBody.appendChild(row);
+                    });
+                }
+            }
+        });
+
+
+        function showAtten() {
+            let elemMain = document.getElementById("main");
+            elemMain.style.height = "98vh"
+            elemMain.innerHTML = '<h1>Attendance</h1> <div id="data-container"> <table id="data-table"> <thead> <tr> <th>Name</th> <th>Absent/Present</th> </tr> </thead> <tbody>  </tbody> </table> </div>';
+
+            async function fetchData() {
+                try {
+                    const response = await fetch('/api/data');
+                    const data = await response.json();
+                    displayData(data);
+                } catch (error) { console.error('Error fetching data:', error); }
+            }
+
+            function displayData(data) {
+                const tableBody = document.querySelector('#data-table tbody');
+                tableBody.innerHTML = '';
+                forEach(item => {
+                    const row = document.createElement('tr');
+                    const nameCell = document.createElement('td');
+                    const Present_AbsentCell = document.createElement('td');
+                    nameCell.textContent = item.name;
+                    Present_AbsentCell.textContent = item.value;
+                    row.appendChild(nameCell);
+                    row.appendChild(Present_AbsentCell);
+                    tableBody.appendChild(row);
+                });
+            }
+            fetchData();
+
+        }
+
+        function showBells() {
+            let elemMain = document.getElementById("main");
+            // elemMain.style.height = "98vh";
+            elemMain.innerHTML = `
+        <nav style="display:flex; justify-content: space-around;flex-direction: row; height: auto; width: auto;">
+            <h1>${window.location + "Smart Bells"}</h1>
+            <div class="container-fluid">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <% if (locals.user) { %>
+                        <button type="button" style="background-color: rgba(14, 19, 31, 0.078); color: white; border: none;"
+                            id="signOut" onclick="SignOut()" enabled>Sign Out
+                        </button>
+                    <% } else { %>
+                        <button type="button" style="background-color: rgba(14, 19, 31, 0.078); color: white; border: none;"
+                            id="signIn" onclick="SignIn()">Sign In
+                        </button>
+                    <% } %>
+                </form>
+            </div>
+        </nav><br>
+        <div id="data-container" style="display: flex;flex-direction:column; justify-content: center; border: solid black .2em;padding:1em; background-color: white; color: black; border-radius: 1em; height: auto; width: 75%; position:relative; left:10em;">
+            <table id="data-table" style="border: 0.01em solid grey; color: black;">
+                <thead style="border: 0.01em solid black;">
+                    <nav style="display:flex; justify-content: space-around;flex-direction: row; height: auto; width: auto;">
+                        <h1>Smart Bells</h1>
+                        <div style="display: flex; flex-direction: row; justify-content: center;">
+                            
+                            <button type="button" id="emergencySirenButton" style="background-color: grey; margin-left:1em; border-radius: 1em; height: 2em; width:9em; border:none;" onclick="toggleValToOne()">Emergency Siren</button>
+                        </div>
+                    </nav>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody style="border: 0.01em solid grey; text-align:center"></tbody>
+            </table>
+        </div>
+        <br>
+        
+
+        <div id="data-container" style="display: flex;flex-direction:column; justify-content: center; border: solid black .2em;padding:1em; background-color: white; color: black; border-radius: 1em; height: auto; width: 75%; position:relative; left:10em;">
+            <table id="data-table2" class="specialEvent" style="border: 0.01em solid grey; color: black;">
+                <thead style="border: 0.01em solid black;">
+                    <nav style="display:flex; justify-content: space-around;flex-direction: row; height: auto; width: auto;">
+                        <h1>Special Events</h1>
+                        <div style="display: flex; flex-direction: row; justify-content: center;">
+                            <button type="button" style="background-color: blue; border-radius: 1em; height: 2em; width:7em; border:none;" onclick="AddEventPage()">Add Events</button>
+                        </div>
+                    </nav>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody style="border: 0.01em solid grey; text-align:center"></tbody>
+            </table>
+        </div>
+    `;
+
+
+            // Emergency Siren Button logic
+
+            async function fetchData() {
+                try {
+                    console.log("Fetching data");
+
+                    // Fetch Bell and Event data concurrently
+                    const [bellResponse, eventResponse] = await Promise.all([
+                        fetch('/api/Bell_data'),
+                        fetch('/api/Event_data')
+                    ]);
+
+                    // Parse the JSON responses
+                    const bellData = await bellResponse.json();
+                    const eventData = await eventResponse.json();
+
+                    console.log("Fetched Bell Data:", bellData);
+                    console.log("Fetched Event Data:", eventData);
+
+                    // Display both data sets
+                    displayData(bellData,eventData);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
+
+
+            function displayData(bell_data, event_data) {
+                const tableBody = document.querySelector('#data-table tbody');
+                tableBody.innerHTML = '';
+
+                function getNextDayOfWeek(dayOfWeek) {
+                    const today = new Date();
+                    const resultDate = new Date(today);
+
+                    let daysToAdd = (dayOfWeek - today.getDay() + 7) % 7;
+                    resultDate.setDate(today.getDate() + daysToAdd);
+                    return resultDate;
+                }
+
+                function formatDate(date) {
+                    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                    return date.toLocaleDateString('en-US', options);
+                }
+
+                function isBellTimePassed(bellTimes) {
+                    const now = new Date();
+                    return bellTimes.every(time => {
+                        const [hours, minutes] = time.split(':').map(Number);
+                        const bellTime = new Date();
+                        bellTime.setHours(hours);
+                        bellTime.setMinutes(minutes);
+                        bellTime.setSeconds(0);
+                        return now > bellTime;
+                    });
+                }
+
+                bell_data.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.id = `row-${index}`;
+
+                    const bellDateCell = document.createElement('td');
+                    const bellFrequencyCell = document.createElement('td');
+                    const bellTimeCell = document.createElement('td');
+                    bellTimeCell.id = `bellTimeCell-${index}`;
+                    bellTimeCell.style.cssText = "border: 0.01em solid #000; border-radius: 0.5em; display: flex; flex-wrap: wrap; min-height: 40px; max-height: 100px; overflow-y: auto;";
+                    const actionsCell = document.createElement('td');
+
+                    const daysOfWeek = {
+                        'Sunday': 0,
+                        'Monday': 1,
+                        'Tuesday': 2,
+                        'Wednesday': 3,
+                        'Thursday': 4,
+                        'Friday': 5,
+                        'Saturday': 6
+                    };
+                    const currentDayOfWeek = daysOfWeek[item.bell_Frequency];
+                    const today = new Date();
+                    const todayDayOfWeek = today.getDay();
+                    const nextDate = getNextDayOfWeek(currentDayOfWeek);
+
+                    const bellTimeArray = Array.isArray(item.bell_Time) ? item.bell_Time : [String(item.bell_Time)];
+
+                    if (todayDayOfWeek === currentDayOfWeek) {
+                        if (isBellTimePassed(bellTimeArray)) {
+                            bellDateCell.textContent = formatDate(nextDate);
+                        } else {
+                            bellDateCell.textContent = formatDate(today);
+                        }
+                    } else {
+                        bellDateCell.textContent = formatDate(nextDate);
+                    }
+
+                    bellFrequencyCell.textContent = item.bell_Frequency;
+                    bellFrequencyCell.contentEditable = false;
+
+                    // Initially render time values as plain text
+                    bellTimeArray.forEach(time => {
+                        const timeBox = document.createElement('div');
+                        timeBox.textContent = time.trim();
+                        timeBox.style.cssText = "margin: 2px; padding: 5px; border: 1px solid black; border-radius: 3px; background-color: grey; color: black;";
+                        bellTimeCell.appendChild(timeBox);
+                    });
+
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.style.backgroundColor = '#4CAF50';
+                    editButton.style.color = 'white';
+                    editButton.style.border = 'none';
+                    editButton.style.borderRadius = '5px';
+                    editButton.style.padding = '5px 10px';
+                    editButton.style.marginRight = '5px';
+                    editButton.style.cursor = 'pointer';
+                    editButton.onmouseenter = () => editButton.style.backgroundColor = '#45a049';
+                    editButton.onmouseleave = () => editButton.style.backgroundColor = '#4CAF50';
+                    editButton.onclick = () => toggleEditSave(editButton, index);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Clear';
+                    deleteButton.classList.add('clear-button');
+                    deleteButton.setAttribute('data-row-id', `row-${index}`);
+                    deleteButton.style.backgroundColor = '#f44336';
+                    deleteButton.style.color = 'white';
+                    deleteButton.style.border = 'none';
+                    deleteButton.style.borderRadius = '5px';
+                    deleteButton.style.padding = '5px 10px';
+                    deleteButton.style.cursor = 'pointer';
+                    deleteButton.onmouseenter = () => deleteButton.style.backgroundColor = '#da190b';
+                    deleteButton.onmouseleave = () => deleteButton.style.backgroundColor = '#f44336';
+
+                    actionsCell.appendChild(editButton);
+                    actionsCell.appendChild(deleteButton);
+
+                    row.appendChild(bellDateCell);
+                    row.appendChild(bellFrequencyCell);
+                    row.appendChild(bellTimeCell);
+                    row.appendChild(actionsCell);
+                    tableBody.appendChild(row);
+
+
+                });
+
+
+                // Toggle Edit/Save functionality
+                function toggleEditSave(button, index) {
+                    const row = document.querySelector(`#row-${index}`);
+                    const bellTimeCell = row.querySelector(`#bellTimeCell-${index}`);
+
+                    if (button.textContent === 'Edit') {
+                        button.textContent = 'Save';
+
+                        // Replace text times with input elements
+                        const timeBoxes = bellTimeCell.querySelectorAll('div');
+                        timeBoxes.forEach(box => {
+                            const timeValue = box.textContent.trim();
+                            const timeInput = document.createElement('input');
+                            timeInput.type = 'time';
+                            timeInput.value = timeValue;
+                            timeInput.style.margin = '2px';
+                            timeInput.style.padding = '5px';
+                            timeInput.style.border = '1px solid black';
+                            timeInput.style.borderRadius = '3px';
+                            bellTimeCell.replaceChild(timeInput, box);
+                        });
+
+                        // Add a new input field for additional times
+                        const newTimeInput = document.createElement('input');
+                        newTimeInput.type = 'time';
+                        newTimeInput.placeholder = 'Add time...';
+                        newTimeInput.style.margin = '2px';
+                        newTimeInput.style.padding = '5px';
+                        newTimeInput.style.border = '1px solid black';
+                        newTimeInput.style.borderRadius = '3px';
+                        bellTimeCell.appendChild(newTimeInput);
+                    } else {
+                        button.textContent = 'Edit';
+
+                        // Replace input elements with text times
+                        const timeInputs = bellTimeCell.querySelectorAll('input[type="time"]');
+                        timeInputs.forEach(input => {
+                            const timeValue = input.value;
+                            const timeBox = document.createElement('div');
+                            timeBox.textContent = timeValue;
+                            timeBox.style.cssText = "margin: 2px; padding: 5px; border: 1px solid black; border-radius: 3px; background-color: grey; color: black;";
+                            bellTimeCell.replaceChild(timeBox, input);
+                        });
+                    }
+                }
+
+                // Event listeners for Clear buttons
+                document.querySelectorAll('.clear-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const rowId = event.target.getAttribute('data-row-id');
+                        const row = document.querySelector(`#${rowId}`);
+                        if (row) {
+                            const timeCell = row.querySelector('td:nth-child(3)');
+                            if (timeCell) {
+                                const timeBoxes = timeCell.querySelectorAll('div'); // Select all time boxes
+                                timeBoxes.forEach(box => box.remove()); // Remove each time box
+                            }
+                        }
+                    });
+                });
+
+                // Table manipulation for events (repeat similar steps if necessary)
+                const tableBody2 = document.querySelector('#data-table2 tbody');
+                tableBody2.innerHTML = '';
+                event_data.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.id = `row2-${index}`;
+
+                    const eventNameCell = document.createElement('td');
+                    const eventDateCell = document.createElement('td');
+                    const eventStartTimeCell = document.createElement('td');
+                    const eventEndTimeCell = document.createElement('td');
+                    const actionsCell = document.createElement('td');
+
+                    eventNameCell.textContent = item.event_Name;
+                    eventDateCell.textContent = item.bell_Date;
+                    eventStartTimeCell.textContent = item.bell_StartTime;
+                    eventEndTimeCell.textContent = item.bell_EndTime;
+
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.style.backgroundColor = '#4CAF50';
+                    editButton.style.color = 'white';
+                    editButton.style.border = 'none';
+                    editButton.style.borderRadius = '5px';
+                    editButton.style.padding = '5px 10px';
+                    editButton.style.marginRight = '5px';
+                    editButton.style.cursor = 'pointer';
+                    editButton.onmouseenter = () => editButton.style.backgroundColor = '#45a049';
+                    editButton.onmouseleave = () => editButton.style.backgroundColor = '#4CAF50';
+                    editButton.onclick = () => toggleEditSave(editButton, `row2-${index}`);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Clear';
+                    deleteButton.classList.add('clear-button');
+                    deleteButton.setAttribute('data-row-id', `row2-${index}`);
+                    deleteButton.style.backgroundColor = '#f44336';
+                    deleteButton.style.color = 'white';
+                    deleteButton.style.border = 'none';
+                    deleteButton.style.borderRadius = '5px';
+                    deleteButton.style.padding = '5px 10px';
+                    deleteButton.style.cursor = 'pointer';
+                    deleteButton.onmouseenter = () => deleteButton.style.backgroundColor = '#da190b';
+                    deleteButton.onmouseleave = () => deleteButton.style.backgroundColor = '#f44336';
+
+                    actionsCell.appendChild(editButton);
+                    actionsCell.appendChild(deleteButton);
+
+                    row.appendChild(eventNameCell);
+                    row.appendChild(eventDateCell);
+                    row.appendChild(eventStartTimeCell);
+                    row.appendChild(eventEndTimeCell);
+                    row.appendChild(actionsCell);
+                    tableBody2.appendChild(row);
+                });
+
+                document.querySelectorAll('.clear-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const rowId = event.target.getAttribute('data-row-id');
+                        const row = document.querySelector(`#${rowId}`);
+                        if (row) {
+                            const timeCell = row.querySelector('td:nth-child(3)');
+                            if (timeCell) {
+                                const timeBoxes = timeCell.querySelectorAll('div');
+                                timeBoxes.forEach(box => box.remove());
+                            }
+                        }
+                    });
+                });
+            }
+
+
+            function toggleEditSave(button, row, id) {
+                const isEditing = button.textContent === 'Save';
+                const cells = row.querySelectorAll('td');
+                const timeCell = cells[2]; // Select the time cell specifically
+                const newTimeInput = timeCell.querySelector('input'); // Get the input field
+
+                if (isEditing) {
+                    // Save changes
+                    const updatedBell = {
+                        bell_Name: cells[0].textContent,
+                        bell_Frequency: cells[1].textContent,
+                        bell_Time: Array.from(timeCell.children).map(div => div.textContent.trim()).filter(time => time != ''), // Collect all time inputs
+                    };
+
+                    // Add the new time from the input field if it's not empty
+                    const newTimeValue = newTimeInput.value.trim();
+                    if (newTimeValue) {
+                        updatedBell.bell_Time.push(newTimeValue);
+                        newTimeInput.value = ''; // Clear the input after adding
+                    }
+
+                    saveBell(id, updatedBell);
+                    button.textContent = 'Edit';
+                    button.style.backgroundColor = '#4CAF50';
+                    timeCell.contentEditable = false; // Only make the time cell non-editable
+                } else {
+                    // Enable editing
+                    button.textContent = 'Save';
+                    button.style.backgroundColor = '#008CBA';
+                    timeCell.contentEditable = true; // Only make the time cell editable
+                }
+            }
+
+
+            async function saveBell(id, updatedBell) {
+                try {
+                    const response = await fetch(`/api/Bell_data/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedBell)
+                    });
+                    const result = await response.json();
+                    console.log("Saved bell:", result);
+                    fetchData(); // Refresh the data after saving
+                } catch (error) {
+                    console.error('Error saving bell:', error);
+                }
+            }
+
+            async function deleteBell(id) {
+                try {
+                    const response = await fetch(`/api/Bell_data/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    console.log("Deleted bell:", result);
+                    fetchData();
+                } catch (error) {
+                    console.error('Error deleting bell:', error);
+                }
+            }
+
+            async function clearTimeCell(rowId) {
+                try {
+                    const row = document.querySelector(`#row-${rowId}`);
+                    if (row) {
+                        const timeCell = row.querySelector('td:nth-child(3)'); // Assuming time cell is the 3rd cell
+                        if (timeCell) {
+                            timeCell.innerHTML = ''; // Clear the content of the time cell
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error clearing time cell:', error);
+                }
+            }
+
+            // Add an event listener to your "Clear" button to call clearTimeCell function
+            document.querySelectorAll('.clear-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const rowId = event.target.getAttribute('data-row-id');
+                    clearTimeCell(rowId);
+                });
+            });
+
+            async function deleteEvent(id) {
+                try {
+                    const response = await fetch(`/api/Bell_data/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    console.log("Deleted bell:", result);
+                    fetchData();
+                } catch (error) {
+                    console.error('Error deleting bell:', error);
+                }
+            }
+
+            fetchData();
+            // fetchData("bell");
+        }
+
+
+        function showNotification() {
+            let elemMain = document.getElementById("main");
+            elemMain.style.height = "98vh"
+            elemMain.innerHTML = '<h1>Smart Notification</h1> <div id="data-container"> <table id="data-table" style="border : solid white 2px;"> <thead style="border : solid white 2px;"> <tr> <th> S.No. </th> <th>Notifications</th> <th>Date</th>  <th>Time</th>  </tr> </thead> <tbody style="border : solid white 2px;">  </tbody> </table> </div>';
+
+            async function fetchData() {
+                try {
+                    const response = await fetch(`/api/data`);
+                    const data = await response.json();
+                    displayData(data);
+                } catch (error) { console.error('Error fetching data:', error); }
+            }
+
+            function displayData(data) {
+                const tableBody = document.querySelector('#data-table tbody');
+                tableBody.innerHTML = '';
+                forEach(item => {
+                    const row = document.createElement('tr');
+                    const S_No = document.createElement('td');
+                    const Notification = document.createElement('td');
+                    const Date = document.createElement('td');
+                    const Time = document.createElement('td');
+
+                    S_No.textContent = item.S_No;
+                    Notification.textContent = item.Notification;
+                    Date.textContent = item.Date;
+                    Time.textContent = item.Time;
+
+                    row.appendChild(S_No);
+                    row.appendChild(Notification);
+                    row.appendChild(Date);
+                    row.appendChild(Time);
+                    tableBody.appendChild(row);
+                });
+            }
+            fetchData();
+
+        }
+
+        function AddBellPage() {
+            window.location.href = '/addBell';
+        }
+
+        function AddEventPage() {
+            window.location.href = '/addEvent';
+        }
+
+        function showIrrigation() {
+            injectCSS("Irrigation.css");
+            const elemMain = document.getElementById("main");
+
+            elemMain.innerHTML = `
+    <div class="container">
+      <main>
+        <header class="header">
+          <h1>Pages / Irrigation</h1>
+          <div class="header-inputs">
+            <input type="text" placeholder="Type here..." class="header-search">
+            <button class="header-signout-btn">Sign Out</button>
+          </div>
+        </header>
+
+        <section class="content">
+          <div class="card pie-chart">
+            <h2>NPK Distribution</h2>
+            <canvas id="pieChart"></canvas>
+          </div>
+
+          <div class="card-group">
+            <div class="card status-card" style="justify-content: right; width: 9em !important; align-items: flex-start;">
+              <h3>Pump Status</h3>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider" style="height: 4em; width: 7em;"></span>
+              </label>
+            </div>
+            <div class="card moisture-card" sytle="width: 9em !important;">
+              <h3 class="mst-lvl">Moisture Level</h3>
+              <svg id="moistureGauge" width="120" height="90" viewBox="0 0 100 50">
+                <path d="M 10 50 A 40 40 0 0 1 90 50" stroke="#e0e0e0" stroke-width="10" fill="none"></path>
+                <path id="moistureLevel" d="M 10 50 A 40 40 0 0 1 90 50" stroke="#0000FF" stroke-width="10" fill="none" stroke-dasharray="126.92" stroke-dashoffset="126.92"></path>
+                <text id="moistureText" x="50" y="45" text-anchor="middle" font-size="12" fill="#000">0%</text>
+              </svg>
+              <div style="display:flex;justify-content:space-between;">
+              <div class="moisture-label left" >0%</div>
+              <div class="moisture-label right" >100%</div>
+              </div>
+            </div>
+            <div class="card status-card" style=" align-items:center; width: 16em !important; height: 11em !important;">
+              <h3>PH Level</h3>
+           
+              
+                <div class="ph-level">
+                  <div class="ph-level-bar" style="width: 45%;"><span class="value" id="PH_value" style="text-align:center;">45.00</span></div>
+                </div>
+
+            </div>
+          </div>
+
+          <div class="card temperature-humidity-card">
+            <h3>Temperature and Humidity</h3>
+            <canvas id="tempHumidityChart"></canvas>
+          </div>
+
+          <div class="card map-card">
+            <h3>Location</h3>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+          </div>
+
+          <div class="card details" style="height:fit-content;width:auto;">
+            <h2>Details</h2>
+            <ul>
+              <li>Moisture Level: <span class="value">Loading...</span></li>
+              <li>Soil Temperature: <span class="value">Loading...</span></li>
+              <li>Nitrogen (N): <span class="value">Loading...</span></li>
+              <li>Phosphorus (P): <span class="value">Loading...</span></li>
+              <li>Potassium (K): <span class="value">Loading...</span></li>
+            </ul>
+          </div>
+
+          <div class="card table" id="prevData">
+            <h2>Previous Data</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Pump Status</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>PH Level</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="4">Loading data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  `;
+
+            // Initialize after DOM updates
+            setTimeout(() => {
+                initializeChart();
+                initializeTempHumidityChart();
+                initializeMap();
+                fetchData();
+            }, 0);
+        }
+
+        function initializeChart() {
+            const canvas = document.getElementById("pieChart");
+            if (!canvas) {
+                console.error("Canvas element not found. Ensure the 'pieChart' element exists in the DOM.");
+                return;
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            if (window.myChartInstance) {
+                window.myChartInstance.destroy();
+            }
+
+            const defaultData = [50, 20, 30];
+            window.myChartInstance = createPieChart(ctx, defaultData);
+        }
+
+        function createPieChart(ctx, data) {
+            return new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Nitrogen (N)", "Phosphorus (P)", "Potassium (K)"],
+                    datasets: [
+                        {
+                            data: data,
+                            backgroundColor: ["#6a9eff", "#a379f9", "#ffc36d"],
+                        },
+                    ],
+                },
+                options: { responsive: true },
+            });
+        }
+
+        function initializeTempHumidityChart() {
+            const canvas = document.getElementById("tempHumidityChart");
+            if (!canvas) {
+                console.error("Canvas element not found. Ensure the 'tempHumidityChart' element exists in the DOM.");
+                return;
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            if (window.tempHumidityChartInstance) {
+                window.tempHumidityChartInstance.destroy();
+            }
+
+            window.tempHumidityChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [], // Labels will be updated dynamically
+                    datasets: [
+                        {
+                            label: 'Temperature (°C)',
+                            data: [],
+                            borderColor: '#ff6384',
+                            backgroundColor: 'rgba(255,99,132,0.2)',
+                            yAxisID: 'y',
+                            tension: 0.4,
+                        },
+                        {
+                            label: 'Humidity (%)',
+                            data: [],
+                            borderColor: '#36a2eb',
+                            backgroundColor: 'rgba(54,162,235,0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.4,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time',
+                            },
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 10,
+                            },
+                        },
+                        y: {
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Temperature (°C)',
+                            },
+                        },
+                        y1: {
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Humidity (%)',
+                            },
+                        },
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        legend: {
+                            display: true,
+                        },
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                },
+            });
+        }
+
+
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits
+            const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits
+            return `${hours}:${minutes}`; // Returns time in HH:mm format
+        }
+
+
+        async function fetchData() {
+            try {
+                const response = await fetch("/api/NPK_data");
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                let responseData = await response.json();
+                console.log("Fetched data:", responseData);
+
+                // Check if responseData is an object with a data property containing the array
+                const dataArray = Array.isArray(responseData) ? responseData : responseData.data;
+
+                if (!Array.isArray(dataArray) || dataArray.length === 0) {
+                    console.error("No data found or data is not an array");
+                    updateUI(null);
+                    return;
+                }
+
+                const labels = [];
+                const temperatureData = [];
+                const humidityData = [];
+
+                dataArray.forEach((entry) => {
+                    // Format timestamp
+                    const timestamp = entry.timestamp || entry.time || entry.date_time;
+                    const formattedTime = formatTimestamp(timestamp);
+                    labels.push(formattedTime);
+
+                    // Collect temperature and humidity data
+                    temperatureData.push(entry.soilTemperature || entry.temperature || 0);
+                    humidityData.push(entry.humidity || entry.moistureLevel || 0);
+                });
+
+                // Use the last entry for updating other UI elements
+                const latestEntry = dataArray[dataArray.length - 1];
+
+                const normalizedData = {
+                    N_value: latestEntry.N_Val || latestEntry.n_value || latestEntry.nitrogen,
+                    P_value: latestEntry.P_Val || latestEntry.p_value || latestEntry.phosphorus,
+                    K_value: latestEntry.K_Val || latestEntry.k_value || latestEntry.potassium,
+                    moistureLevel: latestEntry.moistureLevel || latestEntry.moisture || 0,
+                    soilTemperature: latestEntry.soilTemperature || latestEntry.temperature || 0,
+                    phVal: latestEntry.PH_Level || latestEntry.PH_level || latestEntry.ph_level || 0,
+                    labels,
+                    temperatureData,
+                    humidityData,
+                };
+
+                updateUI(normalizedData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                updateUI(null);
+            }
+        }
+
+
+
+        function updateUI(data) {
+            if (!data) {
+                document.querySelector(".details ul").innerHTML = `
+            <li>Error loading data. Please try again later.</li>
+        `;
+                return;
+            }
+
+            // Update NPK Pie Chart
+            if (window.myChartInstance) {
+                window.myChartInstance.data.datasets[0].data = [
+                    data.N_value,
+                    data.P_value,
+                    data.K_value,
+                ];
+                window.myChartInstance.update();
+            }
+
+            // Update Temperature and Humidity Chart
+            if (window.tempHumidityChartInstance) {
+                window.tempHumidityChartInstance.data.labels = data.labels;
+                window.tempHumidityChartInstance.data.datasets[0].data = data.temperatureData;
+                window.tempHumidityChartInstance.data.datasets[1].data = data.humidityData;
+                window.tempHumidityChartInstance.update();
+            }
+
+            // Update Moisture Gauge
+            const moistureLevelPath = document.getElementById('moistureLevel');
+            const moistureText = document.getElementById('moistureText');
+            const percentage = data.moistureLevel;
+
+            const dashOffset = 126.92 - (126.92 * (percentage / 100));
+            moistureLevelPath.style.strokeDashoffset = dashOffset;
+            moistureText.textContent = `${percentage}%`;
+
+            // Update Details Section
+            const detailsContainer = document.querySelector(".details ul");
+            detailsContainer.innerHTML = `
+        <li>Moisture Level: <span class="value">${data.moistureLevel}</span></li>
+        <li>Soil Temperature: <span class="value">${data.soilTemperature}</span></li>
+        <li>Nitrogen (N): <span class="value">${data.N_value}</span></li>
+        <li>Phosphorus (P): <span class="value">${data.P_value}</span></li>
+        <li>Potassium (K): <span class="value">${data.K_value}</span></li>
+    `;
+
+            // Update PH Value
+            const phVal = document.querySelector("#PH_value");
+            phVal.textContent = data.phVal;
+            const phLevel = document.querySelector(".ph-level");
+
+            if (phVal.textContent < 7) {
+                phLevel.style.backgroundColor = "red";
+            }
+            else if (phVal.textContent > 7) {
+                phLevel.style.backgroundColor = "blue";
+            }
+
+            // Update Previous Data Table   
+            const tableBody = document.querySelector("#prevData tbody");
+            tableBody.innerHTML = "";
+            data.labels.forEach((label, index) => {
+                const row = document.createElement("tr");
+                const pumpStatusCell = document.createElement("td");
+                const dateCell = document.createElement("td");
+                const timeCell = document.createElement("td");
+                const phLevelCell = document.createElement("td");
+
+                pumpStatusCell.textContent = "On";
+                dateCell.textContent = label;
+                timeCell.textContent = data.temperatureData[index];
+                phLevelCell.textContent = data.phVal;
+
+                row.appendChild(pumpStatusCell);
+                row.appendChild(dateCell);
+                row.appendChild(timeCell);
+                row.appendChild(phLevelCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+
+        function initializeMap() {
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.error("Map element not found.");
+                return;
+            }
+
+            // Initialize the map at a default location
+            window.mapInstance = L.map('map').setView([51.505, -0.09], 13);
+
+            // Add the tile layer (using OpenStreetMap tiles)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(window.mapInstance);
+
+            // Add a marker at the default location
+            window.marker = L.marker([51.505, -0.09]).addTo(window.mapInstance);
+        }
+
+        function injectCSS(href) {
+            const existingLink = document.querySelector(`link[href="${href}"]`);
+            if (!existingLink) {
+                const link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.href = href;
+                document.querySelector("head").appendChild(link);
+            }
+        }
+
+        async function toggleValToOne() {
+            try {
+                // Set bell status to 1
+                let response = await fetch('/api/Bell_data/status?status=1', {
+                    method: 'GET'
+                });
+                if (!response.ok) throw new Error('Failed to set status to 1');
+                console.log('Bell status set to 1');
+
+                // Wait for 5 seconds
+                setTimeout(async () => {
+                    try {
+                        // Revert bell status to 0
+                        response = await fetch('/api/Bell_data/status?status=0', {
+                            method: 'GET'
+                        });
+                        if (!response.ok) throw new Error('Failed to revert status to 0');
+                        console.log('Bell status reverted to 0');
+                    } catch (error) {
+                        console.error('Error reverting bell status:', error);
+                    }
+                }, 5000);
+
+            } catch (error) {
+                console.error('Error setting bell status:', error);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
