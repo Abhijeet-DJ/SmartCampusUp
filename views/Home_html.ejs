@@ -803,7 +803,7 @@
                     console.log("Fetched Event Data:", eventData);
 
                     // Display both data sets
-                    displayData(bellData,eventData);
+                    displayData(bellData, eventData);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -900,7 +900,8 @@
                     editButton.style.cursor = 'pointer';
                     editButton.onmouseenter = () => editButton.style.backgroundColor = '#45a049';
                     editButton.onmouseleave = () => editButton.style.backgroundColor = '#4CAF50';
-                    editButton.onclick = () => toggleEditSave(editButton, index);
+                    editButton.onclick = () => toggleEditSave(editButton, `row-${index}`, item._id);
+
 
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Clear';
@@ -929,50 +930,50 @@
 
 
                 // Toggle Edit/Save functionality
-                function toggleEditSave(button, index) {
-                    const row = document.querySelector(`#row-${index}`);
-                    const bellTimeCell = row.querySelector(`#bellTimeCell-${index}`);
+                // function toggleEditSave(button, index) {
+                //     const row = document.querySelector(`#row-${index}`);
+                //     const bellTimeCell = row.querySelector(`#bellTimeCell-${index}`);
 
-                    if (button.textContent === 'Edit') {
-                        button.textContent = 'Save';
+                //     if (button.textContent === 'Edit') {
+                //         button.textContent = 'Save';
 
-                        // Replace text times with input elements
-                        const timeBoxes = bellTimeCell.querySelectorAll('div');
-                        timeBoxes.forEach(box => {
-                            const timeValue = box.textContent.trim();
-                            const timeInput = document.createElement('input');
-                            timeInput.type = 'time';
-                            timeInput.value = timeValue;
-                            timeInput.style.margin = '2px';
-                            timeInput.style.padding = '5px';
-                            timeInput.style.border = '1px solid black';
-                            timeInput.style.borderRadius = '3px';
-                            bellTimeCell.replaceChild(timeInput, box);
-                        });
+                //         // Replace text times with input elements
+                //         const timeBoxes = bellTimeCell.querySelectorAll('div');
+                //         timeBoxes.forEach(box => {
+                //             const timeValue = box.textContent.trim();
+                //             const timeInput = document.createElement('input');
+                //             timeInput.type = 'time';
+                //             timeInput.value = timeValue;
+                //             timeInput.style.margin = '2px';
+                //             timeInput.style.padding = '5px';
+                //             timeInput.style.border = '1px solid black';
+                //             timeInput.style.borderRadius = '3px';
+                //             bellTimeCell.replaceChild(timeInput, box);
+                //         });
 
-                        // Add a new input field for additional times
-                        const newTimeInput = document.createElement('input');
-                        newTimeInput.type = 'time';
-                        newTimeInput.placeholder = 'Add time...';
-                        newTimeInput.style.margin = '2px';
-                        newTimeInput.style.padding = '5px';
-                        newTimeInput.style.border = '1px solid black';
-                        newTimeInput.style.borderRadius = '3px';
-                        bellTimeCell.appendChild(newTimeInput);
-                    } else {
-                        button.textContent = 'Edit';
+                //         // Add a new input field for additional times
+                //         const newTimeInput = document.createElement('input');
+                //         newTimeInput.type = 'time';
+                //         newTimeInput.placeholder = 'Add time...';
+                //         newTimeInput.style.margin = '2px';
+                //         newTimeInput.style.padding = '5px';
+                //         newTimeInput.style.border = '1px solid black';
+                //         newTimeInput.style.borderRadius = '3px';
+                //         bellTimeCell.appendChild(newTimeInput);
+                //     } else {
+                //         button.textContent = 'Edit';
 
-                        // Replace input elements with text times
-                        const timeInputs = bellTimeCell.querySelectorAll('input[type="time"]');
-                        timeInputs.forEach(input => {
-                            const timeValue = input.value;
-                            const timeBox = document.createElement('div');
-                            timeBox.textContent = timeValue;
-                            timeBox.style.cssText = "margin: 2px; padding: 5px; border: 1px solid black; border-radius: 3px; background-color: grey; color: black;";
-                            bellTimeCell.replaceChild(timeBox, input);
-                        });
-                    }
-                }
+                //         // Replace input elements with text times
+                //         const timeInputs = bellTimeCell.querySelectorAll('input[type="time"]');
+                //         timeInputs.forEach(input => {
+                //             const timeValue = input.value;
+                //             const timeBox = document.createElement('div');
+                //             timeBox.textContent = timeValue;
+                //             timeBox.style.cssText = "margin: 2px; padding: 5px; border: 1px solid black; border-radius: 3px; background-color: grey; color: black;";
+                //             bellTimeCell.replaceChild(timeBox, input);
+                //         });
+                //     }
+                // }
 
                 // Event listeners for Clear buttons
                 document.querySelectorAll('.clear-button').forEach(button => {
@@ -992,104 +993,156 @@
                 // Table manipulation for events (repeat similar steps if necessary)
                 const tableBody2 = document.querySelector('#data-table2 tbody');
                 tableBody2.innerHTML = '';
-                event_data.forEach((item, index) => {
-                    const row = document.createElement('tr');
-                    row.id = `row2-${index}`;
 
-                    const eventNameCell = document.createElement('td');
-                    const eventDateCell = document.createElement('td');
-                    const eventStartTimeCell = document.createElement('td');
-                    const eventEndTimeCell = document.createElement('td');
-                    const actionsCell = document.createElement('td');
+                // Ensure event_data is an array
+                if (Array.isArray(event_data)) {
+                    event_data.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        row.id = `row2-${index}`;
 
-                    eventNameCell.textContent = item.event_Name;
-                    eventDateCell.textContent = item.bell_Date;
-                    eventStartTimeCell.textContent = item.bell_StartTime;
-                    eventEndTimeCell.textContent = item.bell_EndTime;
+                        const eventNameCell = document.createElement('td');
+                        const eventDateCell = document.createElement('td');
+                        const eventStartTimeCell = document.createElement('td');
+                        const eventEndTimeCell = document.createElement('td');
+                        const actionsCell = document.createElement('td');
 
-                    const editButton = document.createElement('button');
-                    editButton.textContent = 'Edit';
-                    editButton.style.backgroundColor = '#4CAF50';
-                    editButton.style.color = 'white';
-                    editButton.style.border = 'none';
-                    editButton.style.borderRadius = '5px';
-                    editButton.style.padding = '5px 10px';
-                    editButton.style.marginRight = '5px';
-                    editButton.style.cursor = 'pointer';
-                    editButton.onmouseenter = () => editButton.style.backgroundColor = '#45a049';
-                    editButton.onmouseleave = () => editButton.style.backgroundColor = '#4CAF50';
-                    editButton.onclick = () => toggleEditSave(editButton, `row2-${index}`);
+                        eventNameCell.textContent = item.event_Name;
+                        eventDateCell.textContent = item.bell_Date;
+                        eventStartTimeCell.textContent = item.bell_StartTime;
+                        eventEndTimeCell.textContent = item.bell_EndTime;
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Clear';
-                    deleteButton.classList.add('clear-button');
-                    deleteButton.setAttribute('data-row-id', `row2-${index}`);
-                    deleteButton.style.backgroundColor = '#f44336';
-                    deleteButton.style.color = 'white';
-                    deleteButton.style.border = 'none';
-                    deleteButton.style.borderRadius = '5px';
-                    deleteButton.style.padding = '5px 10px';
-                    deleteButton.style.cursor = 'pointer';
-                    deleteButton.onmouseenter = () => deleteButton.style.backgroundColor = '#da190b';
-                    deleteButton.onmouseleave = () => deleteButton.style.backgroundColor = '#f44336';
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.style.backgroundColor = '#4CAF50';
+                        editButton.style.color = 'white';
+                        editButton.style.border = 'none';
+                        editButton.style.borderRadius = '5px';
+                        editButton.style.padding = '5px 10px';
+                        editButton.style.marginRight = '5px';
+                        editButton.style.cursor = 'pointer';
+                        editButton.onmouseenter = () => editButton.style.backgroundColor = '#45a049';
+                        editButton.onmouseleave = () => editButton.style.backgroundColor = '#4CAF50';
+                        editButton.onclick = () => toggleEditSave(editButton, `row2-${index}`, item._id);
 
-                    actionsCell.appendChild(editButton);
-                    actionsCell.appendChild(deleteButton);
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.classList.add('delete-button');
+                        deleteButton.style.backgroundColor = '#f44336';
+                        deleteButton.style.color = 'white';
+                        deleteButton.style.border = 'none';
+                        deleteButton.style.borderRadius = '5px';
+                        deleteButton.style.padding = '5px 10px';
+                        deleteButton.style.cursor = 'pointer';
+                        deleteButton.onmouseenter = () => deleteButton.style.backgroundColor = '#da190b';
+                        deleteButton.onmouseleave = () => deleteButton.style.backgroundColor = '#f44336';
 
-                    row.appendChild(eventNameCell);
-                    row.appendChild(eventDateCell);
-                    row.appendChild(eventStartTimeCell);
-                    row.appendChild(eventEndTimeCell);
-                    row.appendChild(actionsCell);
-                    tableBody2.appendChild(row);
-                });
-
-                document.querySelectorAll('.clear-button').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const rowId = event.target.getAttribute('data-row-id');
-                        const row = document.querySelector(`#${rowId}`);
-                        if (row) {
-                            const timeCell = row.querySelector('td:nth-child(3)');
-                            if (timeCell) {
-                                const timeBoxes = timeCell.querySelectorAll('div');
-                                timeBoxes.forEach(box => box.remove());
+                        deleteButton.onclick = async () => {
+                            try {
+                                await deleteBell(item._id);
+                                document.getElementById(`row2-${index}`)?.remove();
+                            } catch (error) {
+                                console.error('Error deleting bell:', error);
                             }
-                        }
+                        };
+
+                        actionsCell.appendChild(editButton);
+                        actionsCell.appendChild(deleteButton);
+
+                        row.appendChild(eventNameCell);
+                        row.appendChild(eventDateCell);
+                        row.appendChild(eventStartTimeCell);
+                        row.appendChild(eventEndTimeCell);
+                        row.appendChild(actionsCell);
+                        tableBody2.appendChild(row);
                     });
-                });
+                } else {
+                    console.error("event_data is not an array:", event_data);
+                }
+
+
+                //     document.querySelectorAll('.clear-button').forEach(button => {
+                //         button.addEventListener('click', (event) => {
+                //             const rowId = event.target.getAttribute('data-row-id');
+                //             const row = document.querySelector(`#${rowId}`);
+                //             if (row) {
+                //                 const timeCell = row.querySelector('td:nth-child(3)');
+                //                 if (timeCell) {
+                //                     const timeBoxes = timeCell.querySelectorAll('div');
+                //                     timeBoxes.forEach(box => box.remove());
+                //                 }
+                //             }
+                //         });
+                //     });
             }
 
 
-            function toggleEditSave(button, row, id) {
+            function toggleEditSave(button, rowId, id) {
+                const row = document.getElementById(rowId);
+                if (!row) {
+                    console.error(`Row with ID ${rowId} not found.`);
+                    return;
+                }
+
                 const isEditing = button.textContent === 'Save';
                 const cells = row.querySelectorAll('td');
-                const timeCell = cells[2]; // Select the time cell specifically
-                const newTimeInput = timeCell.querySelector('input'); // Get the input field
+                const timeCell = cells[2];
 
                 if (isEditing) {
-                    // Save changes
+                    // Convert all time inputs to text boxes
+                    const timeInputs = timeCell.querySelectorAll('input[type="time"]');
+                    const updatedTimes = [];
+
+                    timeInputs.forEach(input => {
+                        const timeValue = input.value.trim();
+                        if (timeValue) {
+                            updatedTimes.push(timeValue);
+                            const timeBox = document.createElement('div');
+                            timeBox.textContent = timeValue;
+                            timeBox.style.cssText = "margin: 2px; padding: 5px; border: 1px solid black; border-radius: 3px; background-color: grey; color: black;";
+                            timeCell.replaceChild(timeBox, input);
+                        } else {
+                            timeCell.removeChild(input); // Remove empty inputs
+                        }
+                    });
+
+                    // Save to database
                     const updatedBell = {
-                        bell_Name: cells[0].textContent,
-                        bell_Frequency: cells[1].textContent,
-                        bell_Time: Array.from(timeCell.children).map(div => div.textContent.trim()).filter(time => time != ''), // Collect all time inputs
+                        bell_Name: cells[0].textContent.trim(),
+                        bell_Frequency: cells[1].textContent.trim(),
+                        bell_Time: updatedTimes
                     };
 
-                    // Add the new time from the input field if it's not empty
-                    const newTimeValue = newTimeInput.value.trim();
-                    if (newTimeValue) {
-                        updatedBell.bell_Time.push(newTimeValue);
-                        newTimeInput.value = ''; // Clear the input after adding
-                    }
-
                     saveBell(id, updatedBell);
+
                     button.textContent = 'Edit';
                     button.style.backgroundColor = '#4CAF50';
-                    timeCell.contentEditable = false; // Only make the time cell non-editable
                 } else {
-                    // Enable editing
                     button.textContent = 'Save';
                     button.style.backgroundColor = '#008CBA';
-                    timeCell.contentEditable = true; // Only make the time cell editable
+
+                    // Convert text divs to editable time inputs
+                    const timeBoxes = Array.from(timeCell.querySelectorAll('div'));
+                    timeBoxes.forEach(box => {
+                        const timeValue = box.textContent.trim();
+                        const timeInput = document.createElement('input');
+                        timeInput.type = 'time';
+                        timeInput.value = timeValue;
+                        timeInput.style.margin = '2px';
+                        timeInput.style.padding = '5px';
+                        timeInput.style.border = '1px solid black';
+                        timeInput.style.borderRadius = '3px';
+                        timeCell.replaceChild(timeInput, box);
+                    });
+
+                    // Add an empty time input for adding new time
+                    const newTimeInput = document.createElement('input');
+                    newTimeInput.type = 'time';
+                    newTimeInput.placeholder = 'Add time...';
+                    newTimeInput.style.margin = '2px';
+                    newTimeInput.style.padding = '5px';
+                    newTimeInput.style.border = '1px solid black';
+                    newTimeInput.style.borderRadius = '3px';
+                    timeCell.appendChild(newTimeInput);
                 }
             }
 
@@ -1113,7 +1166,7 @@
 
             async function deleteBell(id) {
                 try {
-                    const response = await fetch(`/api/Bell_data/${id}`, { method: 'DELETE' });
+                    const response = await fetch(`/api/Event_data/${id}`, { method: 'DELETE' });
                     const result = await response.json();
                     console.log("Deleted bell:", result);
                     fetchData();

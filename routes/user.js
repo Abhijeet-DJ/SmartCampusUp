@@ -53,8 +53,8 @@ routes.post("/api/Bell_data", async (req, res) => {
 });
 
 routes.post("/api/Event_data", async (req, res) => {
-    const { eventName, eventStartTime,eventEndTime, bellDate } = req.body;
-    const newBell = new Bell({
+    const { eventName, eventStartTime, eventEndTime, bellDate } = req.body;
+    const newBell = new Event({
         event_Name: eventName,
         bell_StartTime: eventStartTime,
         bell_EndTime: eventEndTime,
@@ -85,7 +85,7 @@ routes.get("/api/Bell_data/", async (req, res) => {
             const newBell = new Bell({
                 createdBy: userId,  // Set createdBy field
                 bell_Frequency: "Monday",  // Default values (adjust as needed)
-                bell_Time: ["08:00"], 
+                bell_Time: ["08:00"],
             });
 
             await newBell.save();
@@ -114,7 +114,7 @@ routes.put('/api/Bell_data/:id', async (req, res) => {
     }
 });
 
-routes.delete('/api/bell_data/:id', async (req, res) => {   
+routes.delete('/api/bell_data/:id', async (req, res) => {
 
     try {
 
@@ -129,24 +129,24 @@ routes.delete('/api/bell_data/:id', async (req, res) => {
     }
 }
 );
-routes.delete('/api/Event_data/:id', async (req, res) => {   
+routes.delete('/api/Event_data/:id', async (req, res) => {
 
     try {
 
-        const deletedBell = await Bell.findByIdAndDelete(req.params.id);
+        const deletedBell = await Event.findByIdAndDelete(req.params.id);
         if (!deletedBell) {
-            return res.status(404).json({ message: 'Bell not found' });
+            return res.status(404).json({ message: 'Event not found' });
         }
         res.json(deletedBell);
     } catch (error) {
-        console.error('Error deleting bell:', error);
+        console.error('Error deleting event:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
 );
 
 routes.get("/api/pumpStatus", async (req, res) => {
-    const currentStat=req.query.status
+    const currentStat = req.query.status
     if (!currentStat) {
         try {
             const pumpStat = await pumpStatus.find({});
@@ -158,52 +158,104 @@ routes.get("/api/pumpStatus", async (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-    
-    else if(currentStat){
-        try { 
-            const newStatus = req.query.status; 
-            if (newStatus) { 
-            await pumpStatus.findOneAndUpdate({}, { Status: newStatus }); 
-            res.json({ message: 'Pump status updated successfully' }); 
-            } 
-            else { 
-                const pumpStat = await pumpStatus.find({}); 
-                const status = pumpStat[0].Status; 
+
+    else if (currentStat) {
+        try {
+            const newStatus = req.query.status;
+            if (newStatus) {
+                await pumpStatus.findOneAndUpdate({}, { Status: newStatus });
+                res.json({ message: 'Pump status updated successfully' });
+            }
+            else {
+                const pumpStat = await pumpStatus.find({});
+                const status = pumpStat[0].Status;
                 res.json(status);
-                } 
-            } 
-                catch (error) { console.error('Error handling pump status:', error); res.status(500).json({ error: 'Internal Server Error' }); }
+            }
+        }
+        catch (error) { console.error('Error handling pump status:', error); res.status(500).json({ error: 'Internal Server Error' }); }
     }
 });
 
 routes.get("/api/Bell_data/status", async (req, res) => {
     try {
         const currentStat = req.query.status;
-        let bellStat = await bellStatus.findOne({}); // Fetch the first document
-        console.log("Bell status from routes : ",bellStat);
-
-        // If no document exists, create one with a default status
+        let bellStat = await bellStatus.findOne({});
         if (!bellStat) {
-            bellStat = await bellStatus.create({ Status: 0 }); // Change "default" to your desired initial value
+            bellStat = await bellStatus.create({ Status: 0 });
         }
 
         if (!currentStat) {
-            res.json(bellStat.Status); // Return the current status
+            const now = new Date();
+            const nowTime = now.getTime();
+            const todayWeekday = now.toLocaleDateString("en-US", { weekday: "long" }); // e.g., "Thursday"
+            const todayDateStr = now.toISOString().slice(0, 10); // e.g., "2025-04-10"
+
+            // Fetch bells only for today’s frequency
+            const bells = await Bell.find({ bell_Frequency: todayWeekday });
+            // Fetch events for today’s date
+            const events = await Event.find({ bell_Date: todayDateStr });
+
+            console.log(`Today's bells: ${bells.length}`);
+            console.log(`Today's events: ${events.length}`);
+
+            let isMatch = false;
+
+            // Check bell times
+            for (let bell of bells) {
+                if (bell.bell_Time && Array.isArray(bell.bell_Time)) {
+                    for (let timeStr of bell.bell_Time) {
+                        const [hours, minutes] = timeStr.split(':');
+                        const target = new Date(now);
+                        target.setHours(+hours, +minutes, 0, 0);
+                        const targetTime = target.getTime();
+                        if (nowTime >= targetTime && nowTime < targetTime + 5000) {
+                            isMatch = true;
+                            break;
+                        }
+                    }
+                }
+                if (isMatch) break;
+            }
+
+            // Check event start and end times
+            if (!isMatch) {
+                for (let event of events) {
+                    const timesToCheck = [event.bell_StartTime, event.bell_EndTime];
+                    for (let timeStr of timesToCheck) {
+                        const [hours, minutes] = timeStr.split(':');
+                        const target = new Date(now);
+                        target.setHours(+hours, +minutes, 0, 0);
+                        const targetTime = target.getTime();
+                        if (nowTime >= targetTime && nowTime < targetTime + 5000) {
+                            isMatch = true;
+                            break;
+                        }
+                    }
+                    if (isMatch) break;
+                }
+            }
+
+            const status = isMatch ? 1 : 0;
+            if (bellStat.Status !== status) {
+                await bellStatus.findOneAndUpdate({}, { Status: status });
+            }
+
+            return res.json(status);
         } else {
-            // Update the status if a new value is provided
             await bellStatus.findOneAndUpdate({}, { Status: currentStat });
-            res.json({ message: 'Bell status updated successfully' });
+            return res.json({ message: "Bell status updated successfully" });
         }
+
     } catch (error) {
-        console.error('Error handling bell status:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error handling bell status:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
 routes.get("/api/NPK_data", async (req, res) => {
     const currentStat = req.query;
-    
-    if (!currentStat) {    
+
+    if (!currentStat) {
         try {
             const npkStat = await NPK.find({});
             console.log(npkStat);
@@ -214,26 +266,27 @@ routes.get("/api/NPK_data", async (req, res) => {
         }
     }
 
-    else if(currentStat){
-        try { 
+    else if (currentStat) {
+        try {
             const newStatus = req.query;
-             
-            if (newStatus) { 
-                const data = [];
-                const dataVal = await NPK.findOneAndUpdate({}, { N_Val: newStatus.N_Val, P_Val: newStatus.P_Val, K_Val: newStatus.K_Val, moistureLevel: newStatus.moistureLevel, soilTemperature: newStatus.soilTemperature, PH_Level: newStatus.PH_Level },{ upsert: true }); 
-                data.push(dataVal);
-            
-            res.json({ message: 'NPK status updated successfully',
-                data
-            }); 
 
-            } 
-            else { 
-                const npkStat = await NPK.find({}); 
+            if (newStatus) {
+                const data = [];
+                const dataVal = await NPK.findOneAndUpdate({}, { N_Val: newStatus.N_Val, P_Val: newStatus.P_Val, K_Val: newStatus.K_Val, moistureLevel: newStatus.moistureLevel, soilTemperature: newStatus.soilTemperature, PH_Level: newStatus.PH_Level }, { upsert: true });
+                data.push(dataVal);
+
+                res.json({
+                    message: 'NPK status updated successfully',
+                    data
+                });
+
+            }
+            else {
+                const npkStat = await NPK.find({});
                 res.json(npkStat);
-                } 
-            } 
-                catch (error) { console.error('Error handling pump status:', error); res.status(500).json({ error: 'Internal Server Error' }); }
+            }
+        }
+        catch (error) { console.error('Error handling pump status:', error); res.status(500).json({ error: 'Internal Server Error' }); }
     }
 
 });
@@ -246,7 +299,7 @@ routes.get("/api/Event_data/", async (req, res) => {
             console.error('User ID is not available');
             return res.status(400).json({ message: 'User ID is required' });
         }
-        const Id = req.user._id; 
+        const Id = req.user._id;
         // console.log('User ID:', Id);
         const objectId = new mongoose.Types.ObjectId(Id);
 
