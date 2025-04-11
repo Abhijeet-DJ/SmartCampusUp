@@ -176,79 +176,112 @@ routes.get("/api/pumpStatus", async (req, res) => {
     }
 });
 
+let autoResetTimer = null;
+const AUTO_RESET_DELAY = 5000; // milliseconds
+
 routes.get("/api/Bell_data/status", async (req, res) => {
     try {
         const currentStat = req.query.status;
-        let bellStat = await bellStatus.findOne({});
+        let bellStat = await bellStatus.findOne();
+
+        // Create the document if it doesn't exist
         if (!bellStat) {
             bellStat = await bellStatus.create({ Status: 0 });
         }
 
-        if (!currentStat) {
-            const now = new Date();
-            const nowTime = now.getTime();
-            const todayWeekday = now.toLocaleDateString("en-US", { weekday: "long" }); // e.g., "Thursday"
-            const todayDateStr = now.toISOString().slice(0, 10); // e.g., "2025-04-10"
+        // ✅ Manual override
+        if (typeof currentStat !== "undefined") {
+            const newStat = parseInt(currentStat);
+            if (![0, 1].includes(newStat)) {
+                return res.status(400).json({ message: "Invalid status value. Use 0 or 1." });
+            }
 
-            // Fetch bells only for today’s frequency
-            const bells = await Bell.find({ bell_Frequency: todayWeekday });
-            // Fetch events for today’s date
-            const events = await Event.find({ bell_Date: todayDateStr });
+            await bellStatus.findOneAndUpdate({ _id: bellStat._id }, { Status: newStat });
 
-            console.log(`Today's bells: ${bells.length}`);
-            console.log(`Today's events: ${events.length}`);
+            // Only clear timer on manual reset
+            if (autoResetTimer) {
+                clearTimeout(autoResetTimer);
+                autoResetTimer = null;
+            }
 
-            let isMatch = false;
+            const updated = await bellStatus.findOne({ _id: bellStat._id });
+            return res.json({ status: updated.Status });
+        }
 
-            // Check bell times
-            for (let bell of bells) {
-                if (bell.bell_Time && Array.isArray(bell.bell_Time)) {
-                    for (let timeStr of bell.bell_Time) {
-                        const [hours, minutes] = timeStr.split(':');
-                        const target = new Date(now);
-                        target.setHours(+hours, +minutes, 0, 0);
-                        const targetTime = target.getTime();
-                        if (nowTime >= targetTime && nowTime < targetTime + 5000) {
-                            isMatch = true;
-                            break;
-                        }
+        // ⏱️ Auto check logic
+        const now = new Date();
+        const nowTime = now.getTime();
+        const todayWeekday = now.toLocaleDateString("en-US", { weekday: "long" });
+        const todayDateStr = now.toISOString().slice(0, 10);
+
+        const bells = await Bell.find({ bell_Frequency: todayWeekday });
+        const events = await Event.find({ bell_Date: todayDateStr });
+
+        console.log(`Today's bells: ${bells.length}`);
+        console.log(`Today's events: ${events.length}`);
+
+        let isMatch = false;
+
+        // 🔔 Bell time match
+        for (let bell of bells) {
+            for (let timeStr of bell.bell_Time || []) {
+                const [hours, minutes] = timeStr.split(":");
+                const target = new Date(now);
+                target.setHours(+hours, +minutes, 0, 0);
+                const targetTime = target.getTime();
+
+                console.log(`Checking bell time: ${timeStr} | Now: ${nowTime} vs ${targetTime}`);
+
+                if (nowTime >= targetTime && nowTime < targetTime + 5000) {
+                    isMatch = true;
+                    break;
+                }
+            }
+            if (isMatch) break;
+        }
+
+        // 📅 Event time match
+        if (!isMatch) {
+            for (let event of events) {
+                const timesToCheck = [event.bell_StartTime, event.bell_EndTime];
+                for (let timeStr of timesToCheck) {
+                    if (!timeStr) continue;
+
+                    const [hours, minutes] = timeStr.split(":");
+                    const target = new Date(now);
+                    target.setHours(+hours, +minutes, 0, 0);
+                    const targetTime = target.getTime();
+
+                    console.log(`Checking event time: ${timeStr} | Now: ${nowTime} vs ${targetTime}`);
+
+                    if (nowTime >= targetTime && nowTime < targetTime + 5000) {
+                        isMatch = true;
+                        break;
                     }
                 }
                 if (isMatch) break;
             }
-
-            // Check event start and end times
-            if (!isMatch) {
-                for (let event of events) {
-                    const timesToCheck = [event.bell_StartTime, event.bell_EndTime];
-                    for (let timeStr of timesToCheck) {
-                        const [hours, minutes] = timeStr.split(':');
-                        const target = new Date(now);
-                        target.setHours(+hours, +minutes, 0, 0);
-                        const targetTime = target.getTime();
-                        if (nowTime >= targetTime && nowTime < targetTime + 5000) {
-                            isMatch = true;
-                            break;
-                        }
-                    }
-                    if (isMatch) break;
-                }
-            }
-
-            const status = isMatch ? 1 : 0;
-            if (bellStat.Status !== status) {
-                await bellStatus.findOneAndUpdate({}, { Status: status });
-            }
-
-            return res.json(status);
-        } else {
-            await bellStatus.findOneAndUpdate({}, { Status: currentStat });
-            return res.json({ message: "Bell status updated successfully" });
         }
 
+        // ✅ If match → set to 1 and start auto-reset timer
+        if (isMatch && bellStat.Status !== 1) {
+            await bellStatus.findOneAndUpdate({ _id: bellStat._id }, { Status: 1 });
+            console.log("✅ Status set to 1 due to time match");
+
+            if (autoResetTimer) clearTimeout(autoResetTimer); // clear old timer
+            autoResetTimer = setTimeout(async () => {
+                await bellStatus.findOneAndUpdate({ _id: bellStat._id }, { Status: 0 });
+                console.log("🔁 Auto-reset status back to 0");
+                autoResetTimer = null;
+            }, AUTO_RESET_DELAY);
+        }
+
+        const updated = await bellStatus.findOne({ _id: bellStat._id });
+        return res.json({ status: updated.Status });
+
     } catch (error) {
-        console.error("Error handling bell status:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error("❌ Error handling bell status:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 });
 
