@@ -12,7 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
-mongoose.connect("mongodb://localhost:27017/Ronogenesis_school").then(e => console.log("MongoDB connected"));
+mongoose.connect("mongodb://localhost:27017/Ronogenesis_school",{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(e => console.log("MongoDB connected"));
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve("./views"));
