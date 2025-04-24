@@ -2,12 +2,12 @@ const { Schema, model } = require("mongoose");
 const mongoose = require("mongoose");
 
 const bellSchema = new Schema({
-    bell_Date: {
-        type: Date,
-        required: true,
-        // Custom setter to strip time
-        set: (date) => new Date(date.setHours(0, 0, 0, 0))
-    },
+    // bell_Date: {
+    //     type: Date,
+    //     required: true,
+    //     // Custom setter to strip time
+    //     set: (date) => new Date(date.setHours(0, 0, 0, 0))
+    // },
     
     bell_Time: [{
         type: String,
