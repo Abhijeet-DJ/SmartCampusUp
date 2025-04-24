@@ -209,9 +209,9 @@ routes.get("/api/Bell_data/status", async (req, res) => {
         }
 
         // ⏱️ Auto check logic
-        const now = new Date();
+        const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
         const nowTime = now.getTime();
-        const todayWeekday = now.toLocaleDateString("en-US", { weekday: "long" });
+        const todayWeekday = now.toLocaleDateString("en-US", { weekday: "long", timeZone: "Asia/Kolkata" });
         const todayDateStr = now.toISOString().slice(0, 10);
 
         const bells = await Bell.find({ bell_Frequency: todayWeekday });
